@@ -1,31 +1,28 @@
 import Cliente from "../Models/clientes.js";
 import Producto from "../Models/productos.js";
-const validarClientePorNombre = async (nombre, { req }) => {
-
-
-    const cliente = await Cliente.findOne({ nombre });
+const validarClientePorIdentificacion = async (id) => {
+    console.log(id);
+    const cliente = await Cliente.findOne({ _id: id });
     if (!cliente) {
         throw new Error("EL CLIENTE NO ESTÁ REGISTRADO");
     }
-    req.cliente = cliente;
 };
 
 
 const validarProductos = async (productos) => {
-    const nombres_productos = productos.map(producto => producto.nombre)
-    const productoDb = await Producto.find({ nombre: nombres_productos })
-
+    const nombres_productos = productos.map(producto => producto.producto)
+    const productoDb = await Producto.find({ _id: { $in: nombres_productos } })
 
     for (let elemento of productos) {
-        const producto = productoDb.find(p => p.nombre == elemento.nombre)
+        const producto = productoDb.find(p => p._id == elemento.producto)
         if (!producto) {
-            throw new Error(`EL PRODUCTO ${elemento.nombre} NO EXISTE`);
+            throw new Error(`EL PRODUCTO ${elemento.producto} NO EXISTE`);
         }
         if (producto.cantidad < elemento.cantidad) {
-            throw new Error(`EL PRODUCTO ${elemento.nombre} NO TIENE STOCK PARA LA VENTA`)
+            throw new Error(`EL PRODUCTO ${elemento.producto} NO TIENE STOCK PARA LA VENTA`)
         }
     }
 
 }
 
-export { validarClientePorNombre, validarProductos }
+export { validarClientePorIdentificacion, validarProductos }

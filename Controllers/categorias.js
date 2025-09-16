@@ -8,7 +8,7 @@ const CreateCategoria = async (req, res) => {
         res.json({ msg: "CATEGORIA CREADA" })
     }
     catch {
-        res.json({ msg: "ERROR AL GUARDAR" })
+        res.json({ msg: "ERROR AL GUARDAR CATEGORIA" })
     }
 }
 
@@ -17,37 +17,39 @@ const ShowCategoria = async (req, res) => {
         const categories = await categorias.find({})
         res.json({ msg: categories })
     } catch {
-        res.json({ msg: "ERROR AL TRAER" })
+        res.json({ msg: "ERROR AL TRAER CATEGORIAS" })
     }
 }
 
 
-const UpdateCategoria = async (req, res) => {
+const ModifyCategoria = async (req, res) => {
     try {
-        const id_antoguo = req.params.id
-        const { id, nombre, descripcion, estado } = req.body
-        await categorias.findOneAndUpdate({ id: id_antoguo }, { id: id, nombre: nombre, descripcion: descripcion, estado: estado })
+        const id_antiguo = req.params.id
+        const { id, nombre, descripcion } = req.body
+        await categorias.findOneAndUpdate({ id: id_antiguo }, { id: id, nombre: nombre, descripcion: descripcion })
         res.json({ msg: "DATOS DE LA CATEGORIA ACTUALIZADOS" })
     }
-
     catch {
-        res.status(400).json({ msg: "ERROR AL ACTUALIZAR" })
+        res.status(400).json({ msg: "ERROR AL ACTUALIZAR LOS DATOS" })
     }
 }
 
-
-
-const UpdateState = async (req, res) => {
+const ModifyState = async (req, res) => { 
     try {
         const { id } = req.params
         const { estado } = req.body
 
+        console.log(estado);
+
         await categorias.findOneAndUpdate({ id: id }, { estado: estado })
+        console.log(id);
         res.json({ msg: "ESTADO ACTUALIZADO" })
     }
 
     catch {
-        res.status(400).json({ msg: "ESTADO ACTUALIZADO" })
+        res.status(400).json({ msg: "ERROR AL ACTUALIZAR EL ESTADO" })
     }
 }
-export { CreateCategoria, ShowCategoria, UpdateCategoria, UpdateState }
+
+
+export { CreateCategoria, ShowCategoria, ModifyCategoria, ModifyState }

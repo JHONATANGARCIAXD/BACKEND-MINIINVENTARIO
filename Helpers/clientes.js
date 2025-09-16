@@ -1,29 +1,33 @@
 
 import Cliente from "../Models/clientes.js";
 
-const validarCorreoUnico = async (correo) => {
-    const cliente = await Cliente.findOne({ correo });
-    if (cliente) {
+const validarIdentificacionUnica = async (identificacion, { req }) => {
+    const identificacionOriginal = req.params.identificacion_buscar;
+    if (identificacion !== identificacionOriginal) {
+        const cliente = await Cliente.findOne({ identificacion: identificacion });
+        if (cliente) {
+            throw new Error("LA IDENTIFICACION YA ESTÁ REGISTRADA");
+        }
+    }
+
+};
+
+
+const validarCorreoUnico = async (correo, {req}) => {
+    const id = req.params.identificacion_buscar;
+    const cliente = await Cliente.findOne({ correo: correo });
+    if (cliente && cliente.identificacion !== id) {
         throw new Error("EL CORREO YA ESTÁ REGISTRADO");
     }
 };
 
 
-const validarClientePorNombre = async (nombre, { req }) => {
-    const cliente = await Cliente.findOne({ nombre });
-    if (!cliente) {
-        throw new Error("EL CLIENTE NO ESTÁ REGISTRADO");
-    }
-    req.cliente = cliente;
-};
 
-
-const validarClientePorCorreo = async (correo_buscar) => {
-    const cliente = await Cliente.findOne({ correo: correo_buscar });
+const validarClientePorIdentificacion = async (identificacion_buscar) => {
+    const cliente = await Cliente.findOne({ identificacion: identificacion_buscar });
     if (!cliente) {
         throw new Error("EL CLIENTE NO ESTÁ REGISTRADO");
     }
 };
 
-
-export { validarCorreoUnico, validarClientePorNombre, validarClientePorCorreo };
+export { validarIdentificacionUnica, validarClientePorIdentificacion, validarCorreoUnico };

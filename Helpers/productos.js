@@ -5,22 +5,23 @@ const BuscarProductoReferenciaNoEx = async (referencia) => {
     if (!producto) {
         throw new Error("El PRODUCTO NO EXISTE");
     }
-    
+
 }
 
 const BuscarProductoReferenciaEx = async (referencia, { req }) => {
-    const referenciaOriginal = referencia
+    const referenciaOriginal = req.params.referencia_buscar
+
     const nuevaRef = req.body.referencia
+
     console.log(referenciaOriginal, nuevaRef);
     if (req.body.estado == undefined || req.body.estado == null) {
         if (nuevaRef !== referenciaOriginal) {
-            const producto = await productos.findOne({ referencia: referencia })
+            const producto = await productos.findOne({ referencia: nuevaRef })
             if (producto) {
                 throw new Error("El PRODUCTO CON ESTA REFERENCIA YA EXISTE");
             }
         }
     }
-
 
 }
 

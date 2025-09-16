@@ -3,44 +3,46 @@ import Producto from "../Models/productos.js";
 
 
 const crearventa = async (req, res) => {
-    const { cliente, productos } = req.body
+    const { cliente, productos, numero } = req.body
     let total = 0
-    const numero = Math.floor(new Date().getTime() * Math.random());
 
-    const nombres_productos = productos.map(producto => producto.nombre)
-    const productoDb = await Producto.find({ nombre: nombres_productos })
+    const ids_productos = productos.map(producto => producto.producto)
+    console.log(productos);
+    const productoDb = await Producto.find({ _id: { $in: ids_productos } })
 
     for (let elemento of productos) {
-        const producto = productoDb.find(nombre => { return nombre.nombre == elemento.nombre })
+        const producto = productoDb.find(p => p._id == elemento.producto)
 
         total += producto.precio * elemento.cantidad
-        await Producto.findOneAndUpdate({ nombre: producto.nombre }, { $inc: { cantidad: -elemento.cantidad } })
+        await Producto.findOneAndUpdate({ _id: producto._id }, { $inc: { cantidad: -elemento.cantidad } })
     }
 
     const venta = new Venta({ numero: numero, cliente: cliente, productos: productos, total: total })
     await venta.save()
 
 
-    res.json({ msg: "CREADA" })
+    res.json({ msg: "VENTA CREADA" })
 }
 
 
 const mostrarventas = async (req, res) => {
-    const ventas = await Venta.find({})
-    res.json(ventas)
+    const ventas = await Venta.find({}).populate("cliente", "nombre identificacion").populate("productos.producto", "nombre precio")
+
+    console.log(JSON.stringify(ventas, null, 2));
+    res.json({msg: ventas})
+
 }
 
 const mostrarventaespe = async (req, res) => {
     const { numero } = req.params
     const venta = await Venta.findOne({ numero: numero })
-    res.json(venta)
+    res.json({ msg: venta })
 }
-
 
 const mostrarventascliente = async (req, res) => {
     const { cliente } = req.params
     const ventas = await Venta.find({ cliente: cliente })
-    res.json(ventas);
+    res.json({ msg: ventas });
 }
 
 const mostrasventasproducto = async (req, res) => {
@@ -59,7 +61,7 @@ const mostrasventasproducto = async (req, res) => {
         ]
     });
 
-    res.json(ventas);
+    res.json({msg: ventas});
 };
 
 export { crearventa, mostrarventas, mostrarventaespe, mostrarventascliente, mostrasventasproducto }

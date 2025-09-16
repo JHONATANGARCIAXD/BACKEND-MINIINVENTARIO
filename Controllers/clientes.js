@@ -2,8 +2,8 @@ import Cliente from "../Models/clientes.js";
 
 const CreateClients = async (req, res) => {
     try {
-        const { nombre, direccion, telefono, correo } = req.body
-        let clientenuevo = new Cliente({ nombre: nombre, direccion: direccion, telefono: telefono, correo: correo })
+        const { identificacion, nombre, direccion, telefono, correo } = req.body
+        let clientenuevo = new Cliente({ identificacion: identificacion, nombre: nombre, direccion: direccion, telefono: telefono, correo: correo })
         await clientenuevo.save()
         res.json({ msg: "CLIENTE CREADO Y GUARDADO CORRECTAMENTE" })
     }
@@ -18,13 +18,15 @@ const ShowClients = async (req, res) => {
         res.json({ msg: clientes })
     }
     catch {
-        res.json({msg: "ERROR AL MOSTRAR CLIENTES"})
+        res.json({ msg: "ERROR AL MOSTRAR CLIENTES" })
     }
 }
 
 const SpecificClient = async (req, res) => {
     try {
-        res.json({ msg: req.cliente })
+        const { id } = req.params
+        const cliente = await Cliente.findOne({ identificacion: id })
+        res.json({ msg: cliente })
     }
     catch {
         res.json({ msg: "ERROR AL BUSCAR" })
@@ -33,9 +35,9 @@ const SpecificClient = async (req, res) => {
 
 const ModifyClient = async (req, res) => {
     try {
-        const { correo_buscar } = req.params
-        const { nombre, direccion, telefono, correo } = req.body
-        await Cliente.findOneAndUpdate({ correo: correo_buscar }, { nombre: nombre, direccion: direccion, telefono: telefono, correo: correo })
+        const { identificacion_buscar } = req.params
+        const { identificacion, nombre, direccion, telefono, correo } = req.body
+        await Cliente.findOneAndUpdate({ identificacion: identificacion_buscar }, { identificacion: identificacion, nombre: nombre, direccion: direccion, telefono: telefono, correo: correo })
         res.json({ msg: "DATOS DEL CLIENTE ACTUALIZADOS" })
     }
     catch {
@@ -43,16 +45,18 @@ const ModifyClient = async (req, res) => {
     }
 }
 
-const DeleteClient = async (req, res) => {
+
+const Modifystate = async (req, res) => {
     try {
-        const { correo_buscar } = req.params
-        await Cliente.findOneAndDelete({ correo: correo_buscar })
-        res.json({ msg: "CLIENTE ELIMINADO CON EXITO" })
+        const { identificacion_buscar } = req.params
+        const { estado } = req.body
+        await Cliente.findOneAndUpdate({ identificacion: identificacion_buscar }, { estado: estado })
+        res.json({ msg: "ESTADO ACTUALIZADO" })
     }
     catch {
-        res.json({ msg: "ERROR AL ELIMINAR" })
+        res.json({ msg: "ERROR AL ACTUALIZAR EL ESTADO" })
     }
 }
 
 
-export { CreateClients, ShowClients, SpecificClient, ModifyClient, DeleteClient }
+export { CreateClients, ShowClients, SpecificClient, ModifyClient, Modifystate }
