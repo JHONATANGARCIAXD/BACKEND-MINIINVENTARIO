@@ -8,7 +8,7 @@ const CreateCategoria = async (req, res) => {
         res.json({ msg: "CATEGORIA CREADA" })
     }
     catch {
-        res.json({ msg: "ERROR AL GUARDAR CATEGORIA" })
+        res.status(400).json({ msg: "ERROR AL GUARDAR CATEGORIA" })
     }
 }
 
@@ -17,7 +17,7 @@ const ShowCategoria = async (req, res) => {
         const categories = await categorias.find({})
         res.json({ msg: categories })
     } catch {
-        res.json({ msg: "ERROR AL TRAER CATEGORIAS" })
+        res.status(400).json({ msg: "ERROR AL TRAER CATEGORIAS" })
     }
 }
 

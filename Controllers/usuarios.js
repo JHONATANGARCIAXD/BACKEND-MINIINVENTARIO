@@ -1,5 +1,5 @@
 import { generarJWT } from "../Middlewares/validar_jwt.js"
-import  bcryptjs  from "bcryptjs"
+import bcryptjs from "bcryptjs"
 import Persona from "../Models/usuarios.js"
 
 const registrar = async (req, res) => {
@@ -19,13 +19,10 @@ const registrar = async (req, res) => {
 const inicio = async (req, res) => {
     const { email, contraseña } = req.body
     let persona = await Persona.findOne({ email: email })
-    if (!persona) {
-        res.json({ msg: "NO SE ENCUENTRA REGISTRADO" })
-    }
 
     const contraseña_v = bcryptjs.compareSync(contraseña, persona.contraseña)
     if (!contraseña_v) {
-        res.json({ msg: "ERROR AL DIGITAR CONTRASEÑA O CORREO" })
+        res.status(400).json({ msg: "ERROR AL DIGITAR CONTRASEÑA O CORREO" })
     } else {
         const token = await generarJWT(persona.nombre);
         res.json({

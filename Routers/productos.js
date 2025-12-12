@@ -10,13 +10,14 @@ const router = Router()
 router.post("/createproduct",
     [
         validarJWT,
-        check("nombre").notEmpty().withMessage("POR FAVOR, COMPLETA EL CAMPO NOMBRE"),
-        check("categoria").notEmpty().withMessage("POR FAVOR, COMPLETA EL CAMPO CATEGORIA"),
-        check("cantidad").notEmpty().withMessage("POR FAVOR, COMPLETA EL CAMPO CANTIDAD"),
-        check("precio").notEmpty().withMessage("POR FAVOR, COMPLETA EL CAMPO PRECIO"),
-        check("descripcion").notEmpty().withMessage("POR FAVOR, COMPLETA EL CAMPO DESCRIPCION"),
         check("referencia").notEmpty().withMessage("POR FAVOR, COMPLETA EL CAMPO REFERENCIA"),
         check("referencia").custom(BuscarProductoReferenciaEx),
+        check("nombre").notEmpty().withMessage("POR FAVOR, COMPLETA EL CAMPO NOMBRE"),
+        check("categoria").notEmpty().withMessage("POR FAVOR, COMPLETA EL CAMPO CATEGORIA"),
+        check("precio").notEmpty().withMessage("POR FAVOR, COMPLETA EL CAMPO PRECIO"),
+        check("precio").isNumeric().withMessage("POR FAVOR, EL CAMPO PRECIO SOLO SON NUMEROS"),
+        check("cantidad").notEmpty().withMessage("POR FAVOR, COMPLETA EL CAMPO CANTIDAD"),
+        check("descripcion").notEmpty().withMessage("POR FAVOR, COMPLETA EL CAMPO DESCRIPCION"),
         validarCampos
     ], CrateProduct)
 

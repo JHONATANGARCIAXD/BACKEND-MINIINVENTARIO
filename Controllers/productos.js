@@ -9,7 +9,7 @@ const CrateProduct = async (req, res) => {
         res.json({ msg: "PRODUCTO CREADO" })
     }
     catch {
-        res.json({ msg: "ERROR AL GUARDAR" })
+        res.status(400).json({ msg: "ERROR AL GUARDAR" })
     }
 }
 
@@ -18,7 +18,7 @@ const ShowProducts = async (req, res) => {
         const productos = await Producto.find({}).populate("categoria", "nombre")
         res.json({ msg: productos })
     } catch {
-        res.json({ msg: "ERROR AL TRAER" })
+        res.status(400).json({ msg: "ERROR AL TRAER" })
     }
 }
 
@@ -31,7 +31,7 @@ const SpecificProduct = async (req, res) => {
         res.json({ msg: producto })
     }
     catch {
-        res.json({ msg: "ERROR AL BUSCAR EL PRODUCTO" })
+        res.status(400).json({ msg: "ERROR AL BUSCAR EL PRODUCTO" })
     }
 }
 
@@ -44,11 +44,10 @@ const ModifyProduct = async (req, res) => {
 
     }
     catch {
-        res.json({ msg: "ERROR AL ACTUALIZAR LOS DATOS " })
+        res.status(400).json({ msg: "ERROR AL ACTUALIZAR LOS DATOS " })
     }
 
 }
-
 
 const Modifystate = async (req, res) => {
     try {
@@ -57,11 +56,11 @@ const Modifystate = async (req, res) => {
         await Producto.findOneAndUpdate({ referencia: referencia_buscar }, { estado: estado })
 
 
-        res.json({ msg: "PRODUCTO ACTUALIZADO" })
+        res.json({ msg: "ESTADO ACTUALIZADO" })
     }
 
     catch {
-        res.status(400).json({ msg: "ERROR AL ACTIVAR / DESACTIVAR" })
+        res.status(400).status(400).json({ msg: "ERROR AL ACTIVAR / DESACTIVAR" })
     }
 }
 
@@ -72,7 +71,7 @@ const DeleteProduct = async (req, res) => {
         res.json({ msg: "PRODUCTO ELIMINADO CORRECTAMENTE" })
     }
     catch {
-        res.json({ msg: "ERROR AL ELIMINAR EL PRODUCTO" })
+        res.status(400).json({ msg: "ERROR AL ELIMINAR EL PRODUCTO" })
     }
 }
 

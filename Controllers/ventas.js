@@ -6,13 +6,11 @@ const crearventa = async (req, res) => {
     const { cliente, productos, numero } = req.body
     let total = 0
 
-    const ids_productos = productos.map(producto => producto.producto)
-    console.log(productos);
+    const ids_productos = productos.map(producto => producto.id)
     const productoDb = await Producto.find({ _id: { $in: ids_productos } })
 
     for (let elemento of productos) {
-        const producto = productoDb.find(p => p._id == elemento.producto)
-
+        const producto = productoDb.find(p => p._id == elemento.id)
         total += producto.precio * elemento.cantidad
         await Producto.findOneAndUpdate({ _id: producto._id }, { $inc: { cantidad: -elemento.cantidad } })
     }
@@ -20,15 +18,14 @@ const crearventa = async (req, res) => {
     const venta = new Venta({ numero: numero, cliente: cliente, productos: productos, total: total })
     await venta.save()
 
-
     res.json({ msg: "VENTA CREADA" })
+    
 }
 
 
 const mostrarventas = async (req, res) => {
-    const ventas = await Venta.find({}).populate("cliente", "nombre identificacion").populate("productos.producto", "nombre precio")
+    const ventas = await Venta.find({}).populate("cliente").populate("productos.id")
 
-    console.log(JSON.stringify(ventas, null, 2));
     res.json({msg: ventas})
 
 }

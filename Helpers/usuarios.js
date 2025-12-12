@@ -1,6 +1,6 @@
 import Usuarios from "../Models/usuarios.js";
 
-const validarCorreoUnicoUsuario = async (correo) => {
+const validarCorreoUnicoUsuario = async (correo, {req}) => {
     const usuario = await Usuarios.findOne({ correo });
     if (usuario) {
         throw new Error("EL CORREO YA ESTÁ REGISTRADO");

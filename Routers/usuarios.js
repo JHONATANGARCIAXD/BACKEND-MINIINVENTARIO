@@ -8,14 +8,15 @@ const router = Router()
 
 router.post("/registrar",
     [
-        check('usuario').notEmpty(),
-        check('email').notEmpty().isEmail().custom(validarCorreoUnicoUsuario),
+        check('email').notEmpty().withMessage("POR FAVOR, COMPLETE EL CAMPO EMAIL").isEmail().withMessage("EL FORMATO DEL CORREO ES INCORRECTO").custom(validarCorreoUnicoUsuario),
+        check('contraseña').notEmpty().withMessage("POR FAVOR, COMPLETA EL CAMPO CONTRASEÑA"),
         validarCampos
     ],
     registrar)
 router.post("/inicio",
     [
-        check('email').notEmpty().isEmail().custom(validarUsuarioPorCorreo),
+        check('email').notEmpty().withMessage("POR FAVOR, COMPLETE EL CAMPO EMAIL").isEmail().withMessage("EL FORMATO DEL CORREO ES INCORRECTO").custom(validarUsuarioPorCorreo),
+        check('contraseña').notEmpty().withMessage("POR FAVOR, COMPLETA EL CAMPO CONTRASEÑA"),
         validarCampos
     ],
     inicio)

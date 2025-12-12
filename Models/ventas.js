@@ -6,7 +6,7 @@ const VentaSchema = new mongoose.Schema({
     cliente: { type: mongoose.Schema.Types.ObjectId, ref: 'Cliente' },
     productos: [{
         _id: false,
-        producto: {
+        id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Producto',
         },
